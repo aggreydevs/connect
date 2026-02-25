@@ -1,0 +1,48 @@
+{
+  "default_server_config": {
+    "m.homeserver": {
+      "base_url": "http://localhost:8008",
+      "server_name": "localhost"
+    }
+  },
+  "disable_custom_urls": true,
+  "disable_guests": true,
+  "brand": "SoundAdvice",
+  "default_theme": "dark",
+  "disable_login_language_selector": true,
+  "default_country_code": "US",
+  "disable_3pid_login": true,
+  "registration_disabled": true,
+  "embed_crypto_setup_dialogs": false,
+  "setting_defaults": {
+    "breadcrumbs": false,
+    "UIFeature.deactivate": false,
+    "UIFeature.registration": false,
+    "UIFeature.passwordReset": false
+  },
+  "force_verification": false,
+  "show_labs_settings": false,
+  "sso_redirect_options": {
+    "immediate": true
+  },
+  "branding": {
+    "auth_header_logo_url": "https://soundadvice.club/favicon.png",
+    "welcome_background_url": "https://soundadvice.club/images/gradient-1.avif",
+    "auth_footer_links": [
+      { "text": "About", "url": "https://www.soundadvice.club/about-us" },
+      { "text": "Help & Support", "url": "mailto:info@soundadvice.club" },
+      {
+        "text": "Privacy Policy",
+        "url": "https://www.soundadvice.club/privacy-policy"
+      },
+      {
+        "text": "Terms of Service",
+        "url": "https://www.soundadvice.club/terms-of-service"
+      }
+    ]
+  },
+  "enable_presence_by_hs_url": {
+    "https://matrix.org": false,
+    "https://matrix-client.matrix.org": false
+  }
+}

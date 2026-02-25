@@ -1,0 +1,35 @@
+[global]
+server_name = "localhost"
+database_path = "/var/lib/tuwunel"
+address = ["0.0.0.0"]
+port = 8008
+allow_registration = false
+allow_encryption = true
+grant_admin_to_first_user = true
+# Prevents users from creating rooms (admins can always create rooms)
+allow_room_creation = false
+block_non_admin_invites = true
+# No federation
+allow_federation = false
+allow_public_room_directory_over_federation = false
+allow_inbound_profile_lookup_federation_requests = false
+auto_join_rooms = [
+	"#announcements:localhost",
+	"#events:localhost",
+	"#general:localhost",
+]
+
+[global.well_known]
+client = "http://localhost:8008"
+server = "localhost:8008"
+
+[[global.identity_provider]]
+brand = "SoundAdvice"
+client_id = "1944f97b-7d2e-430b-834a-9e54f60685e5"
+client_secret_file = "/etc/tuwunel/.client_secret"
+issuer_url = "http://127.0.0.1:54321/auth/v1/"
+discovery_url = "http://127.0.0.1:54321/auth/v1/.well-known/openid-configuration"
+discovery = true
+scope = ["openid", "email", "profile"]
+default = true
+grant_session_duration = 600

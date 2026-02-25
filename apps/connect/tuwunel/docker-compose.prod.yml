@@ -1,0 +1,7 @@
+services:
+  tuwunel:
+    network_mode: host
+    volumes:
+      - ./tuwunel.prod.toml:/etc/tuwunel.toml
+      - ./.client_secret:/etc/tuwunel/.client_secret:ro
+    command: ["-c", "/etc/tuwunel.toml"]

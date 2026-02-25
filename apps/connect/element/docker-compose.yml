@@ -1,0 +1,4 @@
+services:
+  element:
+    container_name: element-web
+    restart: unless-stopped
