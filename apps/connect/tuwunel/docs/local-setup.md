@@ -179,14 +179,14 @@ If `loginToken` appears in the URL, the OAuth exchange succeeded. See `supabase-
 
 In production, Tuwunel runs as a native install (`.deb` package) on a Hetzner VPS with Caddy as a reverse proxy. This is not a Docker-based deployment.
 
-| Component       | Platform       | Notes                                                   |
-| --------------- | -------------- | ------------------------------------------------------- |
-| **Tuwunel**     | Hetzner VPS    | Native `.deb` install, managed by systemd               |
-| **Caddy**       | Hetzner VPS    | Reverse proxy with automatic TLS                        |
-| **Element Web** | Vercel         | Static SPA                                              |
-| **Supabase**    | Supabase Cloud | OAuth 2.1 / OpenID Connect provider                     |
-| **DNS**         | Vercel         | `matrix` A record pointing to the VPS public IP         |
-| **.well-known** | Vercel         | Matrix delegation files served from the landing project |
+| Component       | Platform         | Notes                                                   |
+| --------------- | ---------------- | ------------------------------------------------------- |
+| **Tuwunel**     | Hetzner VPS      | Native `.deb` install, managed by systemd               |
+| **Caddy**       | Hetzner VPS      | Reverse proxy with automatic TLS                        |
+| **Element Web** | Cloudflare Pages | Static SPA, zero runtime cost, free egress              |
+| **Supabase**    | Supabase Cloud   | OAuth 2.1 / OpenID Connect provider                     |
+| **DNS**         | Vercel           | `matrix` A record pointing to the VPS public IP         |
+| **.well-known** | Vercel           | Matrix delegation files served from the landing project |
 
 Key differences from local:
 

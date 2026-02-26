@@ -15,6 +15,10 @@ Real-time messaging for SoundAdvice, powered by [Matrix](https://matrix.org/).
 ```
 connect/
 ├── tuwunel/
+│   ├── docs/
+│   │   ├── local-setup.md           # Full local dev guide
+│   │   ├── production-setup.md      # Production deployment (Hetzner VPS)
+│   │   └── supabase-oauth.md        # SSO flow documentation
 │   ├── docker-compose.yml           # Base service definition
 │   ├── docker-compose.dev.yml       # Dev override (network_mode: host)
 │   ├── docker-compose.prod.yml      # Prod override
@@ -23,6 +27,9 @@ connect/
 │   ├── .client_secret               # OAuth client secret (gitignored)
 │   └── .client_secret.example       # Secret template
 ├── element/
+│   ├── docs/
+│   │   └── production-setup.md      # Production deployment (Cloudflare Pages)
+│   ├── build.sh                     # Extract static files for production
 │   ├── docker-compose.yml           # Base service definition
 │   ├── docker-compose.dev.yml       # Dev override (build local)
 │   ├── docker-compose.prod.yml      # Prod override
@@ -32,10 +39,7 @@ connect/
 │   ├── config.prod.json             # Prod Element config
 │   ├── index.html                   # Custom landing page
 │   └── favicon.png                  # Custom favicon
-└── docs/
-    ├── local-setup.md               # Full local dev guide
-    ├── production-setup.md          # Production deployment guide (Hetzner VPS)
-    └── supabase-oauth.md            # SSO flow documentation
+└── README.md
 ```
 
 ## Quick start
@@ -68,21 +72,30 @@ Element Web runs on `http://localhost:8080`.
 
 ### Production
 
-In production, Tuwunel runs as a native `.deb` install on a Hetzner VPS with Caddy as a reverse proxy (not Docker). See [docs/production-setup.md](docs/production-setup.md) for the full step-by-step deployment guide.
+Each component is deployed independently:
+
+- **Tuwunel** runs as a native `.deb` install on a Hetzner VPS with Caddy as a reverse proxy. See [tuwunel/docs/production-setup.md](tuwunel/docs/production-setup.md).
+- **Element Web** is deployed as static files on Cloudflare Pages (zero runtime cost, free egress, global CDN). See [element/docs/production-setup.md](element/docs/production-setup.md).
 
 ## Deployment architecture
 
-| Component       | Platform       | Notes                                                   |
-| --------------- | -------------- | ------------------------------------------------------- |
-| **Tuwunel**     | Hetzner VPS    | Native `.deb` install, managed by systemd               |
-| **Caddy**       | Hetzner VPS    | Reverse proxy with automatic TLS                        |
-| **Element Web** | Vercel         | Static SPA, deployed independently                      |
-| **Supabase**    | Supabase Cloud | OAuth 2.1 / OpenID Connect                              |
-| **DNS**         | Vercel         | `matrix` A record pointing to the VPS public IP         |
-| **.well-known** | Vercel         | Matrix delegation files served from the landing project |
+| Component       | Platform         | Notes                                                   |
+| --------------- | ---------------- | ------------------------------------------------------- |
+| **Tuwunel**     | Hetzner VPS      | Native `.deb` install, managed by systemd               |
+| **Caddy**       | Hetzner VPS      | Reverse proxy with automatic TLS                        |
+| **Element Web** | Cloudflare Pages | Static SPA, zero runtime cost, free egress              |
+| **Supabase**    | Supabase Cloud   | OAuth 2.1 / OpenID Connect                              |
+| **DNS**         | Vercel           | `matrix` A record pointing to the VPS public IP         |
+| **.well-known** | Vercel           | Matrix delegation files served from the landing project |
 
 ## Documentation
 
-- [Local development setup](docs/local-setup.md)
-- [Production deployment](docs/production-setup.md)
-- [SSO flow and OAuth details](docs/supabase-oauth.md)
+### Tuwunel (Matrix homeserver)
+
+- [Local development setup](tuwunel/docs/local-setup.md)
+- [Production deployment (Hetzner VPS)](tuwunel/docs/production-setup.md)
+- [SSO flow and OAuth details](tuwunel/docs/supabase-oauth.md)
+
+### Element Web (Matrix client)
+
+- [Production deployment (Cloudflare Pages)](element/docs/production-setup.md)
