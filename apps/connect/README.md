@@ -16,6 +16,7 @@ Real-time messaging for SoundAdvice, powered by [Matrix](https://matrix.org/).
 connect/
 ├── tuwunel/
 │   ├── docs/
+│   │   ├── limitations.md           # Known limitations (media, file size)
 │   │   ├── local-setup.md           # Full local dev guide
 │   │   ├── production-setup.md      # Production deployment (Hetzner VPS)
 │   │   └── supabase-oauth.md        # SSO flow documentation
@@ -79,14 +80,15 @@ Each component is deployed independently:
 
 ## Deployment architecture
 
-| Component       | Platform         | Notes                                                   |
-| --------------- | ---------------- | ------------------------------------------------------- |
-| **Tuwunel**     | Hetzner VPS      | Native `.deb` install, managed by systemd               |
-| **Caddy**       | Hetzner VPS      | Reverse proxy with automatic TLS                        |
-| **Element Web** | Cloudflare Pages | Static SPA, zero runtime cost, free egress              |
-| **Supabase**    | Supabase Cloud   | OAuth 2.1 / OpenID Connect                              |
-| **DNS**         | Vercel           | `matrix` A record pointing to the VPS public IP         |
-| **.well-known** | Vercel           | Matrix delegation files served from the landing project |
+| Component         | Platform         | Notes                                                   |
+| ----------------- | ---------------- | ------------------------------------------------------- |
+| **Tuwunel**       | Hetzner VPS      | Native `.deb` install, managed by systemd               |
+| **Caddy**         | Hetzner VPS      | Reverse proxy with automatic TLS                        |
+| **Element Web**   | Cloudflare Pages | Static SPA, zero runtime cost, free egress              |
+| **Supabase**      | Supabase Cloud   | OAuth 2.1 / OpenID Connect                              |
+| **Media storage** | Cloudflare R2    | Mounted via GeeseFS (FUSE), managed by systemd          |
+| **DNS**           | Vercel           | `matrix` A record pointing to the VPS public IP         |
+| **.well-known**   | Vercel           | Matrix delegation files served from the landing project |
 
 ## Documentation
 
@@ -95,6 +97,7 @@ Each component is deployed independently:
 - [Local development setup](tuwunel/docs/local-setup.md)
 - [Production deployment (Hetzner VPS)](tuwunel/docs/production-setup.md)
 - [SSO flow and OAuth details](tuwunel/docs/supabase-oauth.md)
+- [Known limitations](tuwunel/docs/limitations.md)
 
 ### Element Web (Matrix client)
 

@@ -188,7 +188,10 @@ Cause: `issuer_url` does not match discovery `issuer` — HTTP vs HTTPS mismatch
 invalid authentication method
 ```
 
-The OAuth client must be registered with `client_secret_post`, not `client_secret_basic`.
+The OAuth client must be registered with `client_secret_post`, not `client_secret_basic`. Tuwunel only supports `client_secret_post`.
+
+> [!NOTE]
+> As of this writing, the Supabase Dashboard does not expose a UI option for setting `client_secret_post`. OAuth clients created through the Dashboard default to `client_secret_basic`. The client must be created via the Supabase Admin API instead. See the "Create OAuth Client via API" section in [production-setup.md](production-setup.md) for the full API commands.
 
 ---
 
@@ -222,6 +225,25 @@ curl https://<project-ref>.supabase.co/auth/v1/.well-known/openid-configuration
 
 ---
 
+## 5. Empty JWKS Keys (Production)
+
+After a successful authorization redirect, SSO fails with a 500 error and no useful information is returned to the client.
+
+Supabase Cloud does not generate JWKS keys by default. Tuwunel fetches keys from `/auth/v1/.well-known/jwks.json` to validate the ID token signature (step 6 of the flow). If the response is `{"keys": []}`, validation fails silently.
+
+Verify:
+
+```bash
+curl https://<project-ref>.supabase.co/auth/v1/.well-known/jwks.json
+```
+
+If the `keys` array is empty, go to **Supabase Dashboard > Project Settings > JWT Keys** and enable JWT signing keys.
+
+> [!NOTE]
+> This only affects Supabase Cloud. Supabase CLI (local) auto-generates JWKS keys automatically, so the issue only surfaces when deploying to production.
+
+---
+
 # Debugging Checklist
 
 Before testing SSO:
@@ -230,6 +252,7 @@ Before testing SSO:
 - [ ] OAuth server enabled
 - [ ] RS256 signing configured
 - [ ] Discovery endpoint reachable (`curl http://127.0.0.1:54321/auth/v1/.well-known/openid-configuration`)
+- [ ] JWKS endpoint returns non-empty `keys` array (`curl .../auth/v1/.well-known/jwks.json`)
 - [ ] `issuer_url` in `tuwunel/tuwunel.toml` matches discovery `issuer` exactly
-- [ ] OAuth client uses `client_secret_post`
+- [ ] OAuth client created via Admin API with `token_endpoint_auth_method = client_secret_post`
 - [ ] Redirect URI matches exactly
