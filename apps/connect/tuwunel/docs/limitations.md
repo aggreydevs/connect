@@ -2,9 +2,7 @@
 
 ## Media File Size
 
-Tuwunel does not currently support streaming uploads or downloads. All media is buffered in RAM during transfer. Large files (e.g. over 100 MB) may cause excessive memory usage or timeouts on a shared VPS.
-
-The `max_request_size` in the Tuwunel config is set to 20 MB (`20971520` bytes), which limits individual uploads.
+Tuwunel does not currently support streaming uploads or downloads. All media is buffered in RAM during transfer. The server has 4 GB of RAM, so `max_request_size` is set to 2 GB (`2147483648` bytes), which is the practical upper limit for individual uploads given the available memory.
 
 Even with Cloudflare R2 mounted as the media volume via GeeseFS, file handling still passes through Tuwunel's web stack. R2 provides durable object storage but does not offload upload or download processing from the server. From a Tuwunel developer:
 
@@ -14,9 +12,9 @@ Native S3 client support (uploading directly to object storage without going thr
 
 ### Current Mitigations
 
-- `max_request_size` is set to 20 MB to prevent oversized uploads from exhausting server memory
+- `max_request_size` is set to 2 GB (the VPS has 4 GB of RAM, leaving headroom for the OS, database, and Tuwunel itself)
 - Media files are stored on Cloudflare R2 via GeeseFS, keeping VPS disk usage low (database only)
-- For large file sharing, use external links instead of Matrix media uploads
+- For very large file sharing beyond what the server can buffer, use external links instead of Matrix media uploads
 
 ### Possible Future Workarounds
 

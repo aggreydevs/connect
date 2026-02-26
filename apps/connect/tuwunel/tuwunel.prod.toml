@@ -7,7 +7,7 @@ allow_registration = false
 allow_encryption = true
 grant_admin_to_first_user = true
 new_user_displayname_suffix = ""
-max_request_size = 20971520  # 20MB
+max_request_size = 2147483648  # 2GB
 # Prevents users from creating rooms (admins can always create rooms)
 allow_room_creation = false
 block_non_admin_invites = true
