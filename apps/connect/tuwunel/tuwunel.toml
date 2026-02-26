@@ -18,6 +18,7 @@ auto_join_rooms = [
 	"#events:localhost",
 	"#general:localhost",
 ]
+new_user_displayname_suffix = ""
 
 [global.well_known]
 client = "http://localhost:8008"
@@ -25,7 +26,7 @@ server = "localhost:8008"
 
 [[global.identity_provider]]
 brand = "SoundAdvice"
-client_id = "1944f97b-7d2e-430b-834a-9e54f60685e5"
+client_id = "e6dd5cd2-94d4-4556-8750-46e0467ff141"
 client_secret_file = "/etc/tuwunel/.client_secret"
 issuer_url = "http://127.0.0.1:54321/auth/v1/"
 discovery_url = "http://127.0.0.1:54321/auth/v1/.well-known/openid-configuration"

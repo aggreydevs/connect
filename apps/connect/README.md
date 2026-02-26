@@ -34,6 +34,7 @@ connect/
 │   └── favicon.png                  # Custom favicon
 └── docs/
     ├── local-setup.md               # Full local dev guide
+    ├── production-setup.md          # Production deployment guide (Hetzner VPS)
     └── supabase-oauth.md            # SSO flow documentation
 ```
 
@@ -67,31 +68,21 @@ Element Web runs on `http://localhost:8080`.
 
 ### Production
 
-For Tuwunel:
-
-```bash
-cd tuwunel
-cp .client_secret.example .client_secret
-# Edit .client_secret with your production OAuth client secret
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-```
-
-For Element Web:
-
-```bash
-cd element
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-```
+In production, Tuwunel runs as a native `.deb` install on a Hetzner VPS with Caddy as a reverse proxy (not Docker). See [docs/production-setup.md](docs/production-setup.md) for the full step-by-step deployment guide.
 
 ## Deployment architecture
 
-| Component       | Platform                                                     | Notes                                       |
-| --------------- | ------------------------------------------------------------ | ------------------------------------------- |
-| **Tuwunel**     | Railway or any Docker-capable platform                       | Uses `tuwunel.prod.toml` + `.client_secret` |
-| **Element Web** | Any static hosting (Vercel, Netlify, Cloudflare Pages, etc.) | Static SPA, deployed independently          |
-| **Supabase**    | Supabase Cloud                                               | OAuth 2.1 / OpenID Connect                  |
+| Component       | Platform       | Notes                                                   |
+| --------------- | -------------- | ------------------------------------------------------- |
+| **Tuwunel**     | Hetzner VPS    | Native `.deb` install, managed by systemd               |
+| **Caddy**       | Hetzner VPS    | Reverse proxy with automatic TLS                        |
+| **Element Web** | Vercel         | Static SPA, deployed independently                      |
+| **Supabase**    | Supabase Cloud | OAuth 2.1 / OpenID Connect                              |
+| **DNS**         | Vercel         | `matrix` A record pointing to the VPS public IP         |
+| **.well-known** | Vercel         | Matrix delegation files served from the landing project |
 
 ## Documentation
 
 - [Local development setup](docs/local-setup.md)
+- [Production deployment](docs/production-setup.md)
 - [SSO flow and OAuth details](docs/supabase-oauth.md)

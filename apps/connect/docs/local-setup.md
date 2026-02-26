@@ -177,18 +177,24 @@ If `loginToken` appears in the URL, the OAuth exchange succeeded. See `supabase-
 
 # Production
 
-In production, each component is deployed separately:
+In production, Tuwunel runs as a native install (`.deb` package) on a Hetzner VPS with Caddy as a reverse proxy. This is not a Docker-based deployment.
 
-| Component                       | Platform                                                     | Notes                                                 |
-| ------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
-| **Tuwunel** (Matrix homeserver) | Railway or any Docker-capable platform                       | Uses `tuwunel.prod.toml` + `.client_secret`           |
-| **Element Web** (Matrix client) | Any static hosting (Vercel, Netlify, Cloudflare Pages, etc.) | Static SPA -- just HTML/CSS/JS served by a web server |
-| **Supabase** (Auth provider)    | Supabase Cloud                                               | Hosted at `https://<project-ref>.supabase.co`         |
+| Component       | Platform       | Notes                                                   |
+| --------------- | -------------- | ------------------------------------------------------- |
+| **Tuwunel**     | Hetzner VPS    | Native `.deb` install, managed by systemd               |
+| **Caddy**       | Hetzner VPS    | Reverse proxy with automatic TLS                        |
+| **Element Web** | Vercel         | Static SPA                                              |
+| **Supabase**    | Supabase Cloud | OAuth 2.1 / OpenID Connect provider                     |
+| **DNS**         | Vercel         | `matrix` A record pointing to the VPS public IP         |
+| **.well-known** | Vercel         | Matrix delegation files served from the landing project |
 
 Key differences from local:
 
-- `issuer_url` changes to `https://<project-ref>.supabase.co/auth/v1/`
-- Tuwunel uses a real domain with HTTPS (e.g. `https://connect.soundadvice.club`)
+- Tuwunel is installed natively via `.deb`, not Docker
+- Caddy handles TLS termination and reverse proxying to Tuwunel on `localhost:8008`
+- `issuer_url` points to Supabase Cloud (`https://<project-ref>.supabase.co/auth/v1`)
+- Matrix delegation via `.well-known` files allows `@user:soundadvice.club` IDs while the server runs at `matrix.soundadvice.club`
 - Element's `config.prod.json` points to the Tuwunel production URL
 - OAuth redirect URIs must be updated in Supabase for the production domain
-- The OAuth client should be recreated in Supabase Cloud with production credentials
+
+See [production-setup.md](production-setup.md) for the full step-by-step deployment guide.
